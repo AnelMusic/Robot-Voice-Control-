@@ -1,0 +1,14 @@
+<launch>
+    <node name="recognizer" pkg="pocketsphinx" type="recognizer.py">
+       <param name="lm" value="$(find sprachtutorial)/voice_teleop/config/motion_command.lm"/>
+       <param name="dict" value="$(find sprachtutorial)/voice_teleop/config/motion_command.dic"/>
+   </node>
+
+   <node name="voice_teleop" pkg="sprachtutorial" type="voice_teleop.py">
+      <remap from="/cmd_vel" to="/cmd_vel_mux/input/teleop"/>
+   </node>
+
+   <include file="$(find sprachtutorial)/launch/turtlebot_in_stage.launch"/>
+</launch>
+
+

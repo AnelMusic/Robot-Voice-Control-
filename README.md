@@ -6,3 +6,5 @@ This code demonstrates one way of using a dictionary to encode voice commands an
 
 Demonsration video:
 https://www.youtube.com/watch?v=xiYQWY5zzMs&feature=youtu.be
+
+Readme will be updated soon.

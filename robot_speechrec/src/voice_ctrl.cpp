@@ -1,9 +1,6 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/String.h>
-//#include "boost/thread/mutex.hpp"
-//#include "boost/thread/thread.hpp"
-//#include "ros/console.h"
 #include <string>
 
 std_msgs::String readCommand;
@@ -27,7 +24,8 @@ private:
 
 
 };
-/** constructor **/
+
+
 RobotCtrl::RobotCtrl():
 						  nodeHandle("~"),
 						  linearVelocity(1),
@@ -44,10 +42,10 @@ RobotCtrl::RobotCtrl():
 	voiceRecognitionSubscriber = nodeHandle.subscribe("/recognizer/output", 1000, &RobotCtrl::commandCallBack, this);
 
 	printf("start control\n");
-	/*
+	
+							  /*
 	Loop with 5Hz frequency, continuous publishing until ros exit
 	*/
-
 	ros::Rate rate(5);
 	while (ros::ok()){
 		//Publish cmd_vel 
@@ -57,7 +55,7 @@ RobotCtrl::RobotCtrl():
 	}
 
 }
-/** callback **/
+
 /*
 Basically "switch-case motion commands"
 */
@@ -100,9 +98,6 @@ void RobotCtrl::commandCallBack(const std_msgs::String& command)
 
 int main(int argc, char** argv)
 {
-	/*
-	Init ros an specify the name of our node "voice_ctrl"
-	*/
 	ros::init(argc, argv, "voice_ctrl");
 	RobotCtrl voice_teleop;
 	ros::spin();

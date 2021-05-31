@@ -13,52 +13,33 @@ public:
 private:
 	void commandCallBack(const std_msgs::String& command);
 	void publish();
-
+	int linearVelocity;
+	int angularVelocity;
 	ros::NodeHandle nodeHandle;
-
-
-	int linearVelocity, angularVelocity;
 	ros::Publisher velocityPublisher;
 	ros::Subscriber voiceRecognitionSubscriber;
 	geometry_msgs::Twist cmd_vel;
-
-
 };
 
 
-RobotCtrl::RobotCtrl():
-						  nodeHandle("~"),
-						  linearVelocity(1),
-						  angularVelocity(0)
+RobotCtrl::RobotCtrl(): 
+	nodeHandle("~"), linearVelocity(1), angularVelocity(0)
 {
 	nodeHandle.param("linear_velocity", linearVelocity, linearVelocity);
 	nodeHandle.param("angular_velocity", angularVelocity, angularVelocity);
-
-	/*
-	Publish on the /cmd_vel topic
-	Subscribe to recognizer/output 
-	*/
 	velocityPublisher = nodeHandle.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
 	voiceRecognitionSubscriber = nodeHandle.subscribe("/recognizer/output", 1000, &RobotCtrl::commandCallBack, this);
-
-	printf("start control\n");
-	
-							  /*
-	Loop with 5Hz frequency, continuous publishing until ros exit
-	*/
 	ros::Rate rate(5);
-	while (ros::ok()){
+
+  	while (ros::ok()){
 		//Publish cmd_vel 
 		velocityPublisher.publish(cmd_vel);
 		rate.sleep();
 		ros::spinOnce();
 	}
-
 }
 
-/*
-Basically "switch-case motion commands"
-*/
+
 void RobotCtrl::commandCallBack(const std_msgs::String& command)
 { 
 	if(command.data.compare("stop") == 0)
